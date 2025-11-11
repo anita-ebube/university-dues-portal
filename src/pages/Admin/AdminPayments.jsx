@@ -22,26 +22,32 @@ export default function AdminPayments() {
           ...doc.data(),
         }));
 
+        /// Fetch all users to get names
         // Fetch all users to get names
         const usersSnapshot = await getDocs(collection(db, "users"));
         const usersMap = {};
+        
+        // Map users by their document ID (uid)
         usersSnapshot.docs.forEach((doc) => {
           const userData = doc.data();
-          if (userData.regNo) {
-            usersMap[userData.regNo] = {
-              name: userData.name,
-              department: userData.department,
-            };
-          }
+          usersMap[doc.id] = {
+            name: userData.name,
+            department: userData.department,
+            regNo: userData.regNo,
+          };
         });
 
         // Merge payment data with user data
-        const enrichedPayments = paymentList.map((payment) => ({
-          ...payment,
-          name: usersMap[payment.regNo]?.name || payment.name || "N/A",
-          department: usersMap[payment.regNo]?.department || payment.department || "—",
-        }));
-
+        const enrichedPayments = paymentList.map((payment) => {
+          const userInfo = usersMap[payment.uid];
+          
+          return {
+            ...payment,
+            name: userInfo?.name || payment.name || "N/A",
+            department: userInfo?.department || payment.department || "—",
+            regNo: userInfo?.regNo || payment.regNo || "N/A",
+          };
+        });
         setPayments(enrichedPayments);
       } catch (err) {
         console.error("❌ Error fetching payments:", err);
