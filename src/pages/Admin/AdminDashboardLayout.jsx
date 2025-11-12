@@ -13,7 +13,6 @@ export default function AdminDashboardLayout() {
 
       {/* Main content */}
       <div className="flex-1 flex flex-col">
-        <AdminHeader toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
 
         <main className="flex-1 p-6">
           <Outlet />

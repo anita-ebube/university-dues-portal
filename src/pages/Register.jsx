@@ -103,7 +103,7 @@ const Register = ({ onSwitchToLogin }) => {
       
       setLoading(false);
       setSuccess('Account created successfully! Redirecting to login...');
-
+      navigate('/login');
       // Clear form
       setFormData({
         name: '',

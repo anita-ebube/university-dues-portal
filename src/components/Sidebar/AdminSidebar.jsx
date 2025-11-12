@@ -1,41 +1,81 @@
-import { Home, Users, CreditCard, Settings } from "lucide-react";
-import { NavLink } from "react-router-dom";
-import logo from "../../assets/logo.png";
+import React, { useState } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
+import { useAuth } from "../../service/authService";
+import logoSrc from "../../assets/logo.png";
+import { Home, Users, CreditCard, Settings,LogOut } from "lucide-react";
 
-const links = [
-  { name: "Dashboard", icon: Home, path: "/admin" },
+export default function AdminSidebar() {
+  const { currentUser, logout } = useAuth();
+  const [imgError, setImgError] = useState(false);
+  const navigate = useNavigate();
+
+  if (!currentUser)
+    return <div className="w-64 flex items-center justify-center">Loading...</div>;
+
+  const navItems = [
+  { name: "Dashboard", icon: Home, path: "/admin" , end: true},
   { name: "Students", icon: Users, path: "/admin/students" },
   { name: "Payments", icon: CreditCard, path: "/admin/payments" },
-  { name: "Settings", icon: Settings, path: "/admin/settings" },
+  // { name: "Settings", icon: Settings, path: "/admin/settings" },
 ];
+  const handleLogout = async () => {
+    try {
+      await logout();
+      navigate("/login");
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
 
-export default function AdminSidebar({ isOpen }) {
   return (
-    <aside
-      className={`bg-green-700 text-white transition-all duration-300 ${
-        isOpen ? "w-64" : "w-20"
-      } flex flex-col`}
-    >
-      <div className="flex items-center justify-center py-6 border-b border-green-600">
-        <img src={logo} alt="logo" className="w-10 h-10" />
+    <div className="w-64 bg-white shadow-lg flex flex-col fixed left-0 top-0 h-screen">
+      {/* Logo */}
+      <div className="p-6 border-b flex items-center gap-3">
+        <div className="w-10 h-10 rounded-full overflow-hidden bg-green-800 flex items-center justify-center">
+          {!imgError ? (
+            <img
+              src={logoSrc}
+              alt="UNN Dues logo"
+              onError={() => setImgError(true)}
+            />
+          ) : (
+            <span className="text-white font-bold">U</span>
+          )}
+        </div>
+        <span className="font-bold text-lg">NACOS Dues</span>
       </div>
 
-      <nav className="flex-1 mt-6 space-y-2">
-        {links.map(({ name, icon: Icon, path }) => (
+      {/* Navigation */}
+      <nav className="flex-1 p-4 overflow-y-auto">
+        {navItems.map(({ name, path, icon: Icon, end }) => (
           <NavLink
-            key={name}
+            key={path}
             to={path}
+            end={end} // Add this prop
             className={({ isActive }) =>
-              `flex items-center px-5 py-3 rounded-lg transition ${
-                isActive ? "bg-green-600" : "hover:bg-green-800"
+              `w-full flex items-center gap-3 px-4 py-3 rounded-lg mb-2 transition-colors ${
+                isActive
+                  ? "bg-green-100 text-green-700 font-semibold"
+                  : "text-gray-700 hover:bg-gray-100"
               }`
             }
           >
             <Icon className="w-5 h-5" />
-            {isOpen && <span className="ml-3 text-sm font-medium">{name}</span>}
+            <span className="font-medium">{name}</span>
           </NavLink>
         ))}
       </nav>
-    </aside>
+
+      {/* Logout */}
+      <div className="p-4 border-t">
+        <button
+          onClick={handleLogout}
+          className="w-full flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+        >
+          <LogOut className="w-5 h-5" />
+          <span>Logout</span>
+        </button>
+      </div>
+    </div>
   );
 }

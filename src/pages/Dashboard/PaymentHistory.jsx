@@ -1,4 +1,4 @@
-import Sidebar from "../components/Sidebar";
+import Sidebar from "../components/Sidebar/Sidebar.jsx";
 import PaymentHistoryComponent from "./Dashboard/Payments/PaymentHistoryComponent";
 export default function PaymentHistory() {
     <div>
