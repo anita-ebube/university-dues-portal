@@ -37,7 +37,8 @@ export default function PaymentForm() {
       });
       alert("Payment verified successfully! Temporary receipt ready.");
       // Use React Router navigation - refresh the current page
-      navigate(0);
+      // navigate(0);
+      location.href('/dashboard'); 
     } catch (error) {
       console.error(error);
       alert("Payment save failed. Contact support.");
