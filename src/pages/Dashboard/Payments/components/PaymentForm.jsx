@@ -40,7 +40,7 @@ export default function PaymentForm() {
       // Use React Router navigation - refresh the current page
       // navigate(0);
       setTimeout(() => {
-              location.href= '/dashboard'; 
+              location.reload(); 
       }, 3000);
     } catch (error) {
       console.error(error);
