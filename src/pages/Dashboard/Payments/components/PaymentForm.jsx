@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { setDoc, doc, serverTimestamp } from "firebase/firestore";
 import { db } from "../../../../firebase/firebaseConfig";
 import { useAuth } from "../../../../service/authService";
@@ -15,6 +16,7 @@ export default function PaymentForm() {
   const [level, setLevel] = useState("100");
   const [isProcessing, setIsProcessing] = useState(false);
   const { currentUser } = useAuth();
+  const navigate = useNavigate();
 
   if (!currentUser || !currentUser.email) return <div>Loading...</div>;
 
@@ -34,7 +36,8 @@ export default function PaymentForm() {
         reference: reference.reference,
       });
       alert("Payment verified successfully! Temporary receipt ready.");
-      window.location.reload();
+      // Use React Router navigation - refresh the current page
+      navigate(0);
     } catch (error) {
       console.error(error);
       alert("Payment save failed. Contact support.");
