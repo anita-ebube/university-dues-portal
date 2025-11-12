@@ -1,1 +1,1 @@
-export const PAYSTACK_PUBLIC_KEY = "pk_test_c110ed6d6650bbd48690954ab01b05ca71ea9c03";
+export const PAYSTACK_PUBLIC_KEY = process.env.REACT_APP_PAYSTACK_PUBLIC_KEY;
