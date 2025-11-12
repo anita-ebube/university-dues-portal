@@ -3,16 +3,24 @@ import { setDoc, doc, serverTimestamp } from "firebase/firestore";
 import { db } from "../../../../firebase/firebaseConfig";
 import { useAuth } from "../../../../service/authService";
 import { PaystackButton } from "react-paystack";
-import { PAYSTACK_PUBLIC_KEY } from "../../../../service/paystack";
 import { levelPrices } from "../utils/levelPrices";
 import { Loader } from "lucide-react";
+
+// Fixed: Use import.meta.env for Vite instead of process.env
+const getPaystackPublicKey = () => {
+  return import.meta.env.VITE_PAYSTACK_PUBLIC_KEY || "pk_test_c110ed6d6650bbd48690954ab01b05ca71ea9c03";
+};
 
 export default function PaymentForm() {
   const [level, setLevel] = useState("100");
   const [isProcessing, setIsProcessing] = useState(false);
   const { currentUser } = useAuth();
 
-  const amount = levelPrices[level] * 100;
+  if (!currentUser || !currentUser.email) return <div>Loading...</div>;
+
+  const amount = levelPrices[level] * 100; // kobo
+
+  const PAYSTACK_PUBLIC_KEY = getPaystackPublicKey();
 
   const handleSuccess = async (reference) => {
     setIsProcessing(true);
@@ -33,6 +41,15 @@ export default function PaymentForm() {
     } finally {
       setIsProcessing(false);
     }
+  };
+
+  const paystackProps = {
+    email: currentUser.email,
+    amount,
+    publicKey: PAYSTACK_PUBLIC_KEY,
+    text: "Pay with Paystack",
+    onSuccess: handleSuccess,
+    reference: `ref-${currentUser.uid}-${Date.now()}`,
   };
 
   return (
@@ -63,11 +80,7 @@ export default function PaymentForm() {
         ) : (
           <PaystackButton
             className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700"
-            email={currentUser.email}
-            amount={amount}
-            publicKey={PAYSTACK_PUBLIC_KEY}
-            text="Pay with Paystack"
-            onSuccess={handleSuccess}
+            {...paystackProps}
           />
         )}
       </div>

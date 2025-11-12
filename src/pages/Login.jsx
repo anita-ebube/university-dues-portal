@@ -156,7 +156,7 @@ const Login = ({ onSwitchToRegister }) => {
                 name="regNo"
                 value={formData.regNo}
                 onChange={handleInputChange}
-                placeholder="e.g., 2020/241842"
+                placeholder="e.g., 2020/249042"
                 maxLength={11}
                 className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none transition"
                 required
