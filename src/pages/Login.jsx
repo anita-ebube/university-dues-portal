@@ -49,7 +49,7 @@ const Login = ({ onSwitchToRegister }) => {
     setError('');
 
     if (!validateRegNo(formData.regNo)) {
-      setError('Invalid registration number format. Use format: 2020/241842');
+      setError('Invalid registration number format. Use format: 2020/241762');
       setLoading(false);
       return;
     }
