@@ -16,7 +16,7 @@ export default function PaymentForm() {
   const [level, setLevel] = useState("100");
   const [isProcessing, setIsProcessing] = useState(false);
   const { currentUser } = useAuth();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   if (!currentUser || !currentUser.email) return <div>Loading...</div>;
 
@@ -35,15 +35,17 @@ export default function PaymentForm() {
         date: serverTimestamp(),
         reference: reference.reference,
       });
+      setIsProcessing(false);
       alert("Payment verified successfully! Temporary receipt ready.");
       // Use React Router navigation - refresh the current page
       // navigate(0);
-      location.href('/dashboard'); 
+      setTimeout(() => {
+              location.href= '/dashboard'; 
+      }, 3000);
     } catch (error) {
       console.error(error);
-      alert("Payment save failed. Contact support.");
-    } finally {
       setIsProcessing(false);
+      alert("Payment save failed. Contact support.");
     }
   };
 
