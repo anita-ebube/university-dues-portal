@@ -19,7 +19,7 @@ export default function StudentDashboardLayout() {
   return (
     <div className="flex min-h-screen bg-gray-50">
       <Sidebar />
-      <main className="ml-64 flex-1 overflow-y-auto">
+      <main className="lg:ml-64 flex-1 overflow-y-auto">
         <div className="p-4 md:p-8">
           <Outlet />
         </div>

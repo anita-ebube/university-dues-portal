@@ -1,7 +1,6 @@
 import { useState } from "react";
 import AdminSidebar from "../../components/Sidebar/AdminSidebar";
 import { Outlet } from "react-router-dom";
-
 export default function AdminDashboardLayout() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
@@ -11,8 +10,7 @@ export default function AdminDashboardLayout() {
       <AdminSidebar isOpen={isSidebarOpen} />
 
       {/* Main content */}
-      <div className="flex-1 flex flex-col">
-
+      <div className=" flex-1 flex flex-col">
         <main className="flex-1 p-6">
           <Outlet />
         </main>

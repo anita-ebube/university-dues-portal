@@ -33,6 +33,7 @@ function App() {
         <Route path="profile" element={<Profile />} />
       </Route>
 
+
       {/* Admin Dashboard */}
       <Route 
         path="/admin" 

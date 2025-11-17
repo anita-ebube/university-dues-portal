@@ -46,10 +46,10 @@ export default function AdminStudents() {
       <div className="flex items-center justify-center h-screen bg-slate-50">
         <div className="text-center">
           <div className="relative">
-            <div className="w-20 h-20 border-4 border-blue-200 rounded-full"></div>
-            <div className="w-20 h-20 border-4 border-blue-600 rounded-full border-t-transparent animate-spin absolute top-0 left-0"></div>
+            <div className="w-20 h-20 border-4 border-green-200 rounded-full"></div>
+            <div className="w-20 h-20 border-4 border-green-700 rounded-full border-t-transparent animate-spin absolute top-0 left-0"></div>
           </div>
-          <p className="text-slate-600 font-medium mt-4">Loading students...</p>
+          <p className="text-slate-600 font-medium mt-4">Loading payments...</p>
         </div>
       </div>
     );

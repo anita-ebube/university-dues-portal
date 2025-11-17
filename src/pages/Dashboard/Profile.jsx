@@ -154,7 +154,7 @@ export default function Profile() {
   return (
     <div className="max-w-4xl mx-auto">
       <div className="mb-8">
-        <h1 className="text-4xl font-bold text-gray-900">My Profile</h1>
+        {/* <h1 className="text-4xl font-bold text-gray-900">My Profile</h1> */}
       </div>
 
       {/* Profile Header Card */}

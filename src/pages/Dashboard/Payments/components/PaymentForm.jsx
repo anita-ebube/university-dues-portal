@@ -5,9 +5,8 @@ import { db } from "../../../../firebase/firebaseConfig";
 import { useAuth } from "../../../../service/authService";
 import { PaystackButton } from "react-paystack";
 import { levelPrices } from "../utils/levelPrices";
-import { Loader } from "lucide-react";
+import { Loader, CreditCard, CheckCircle, AlertCircle } from "lucide-react";
 
-// Fixed: Use import.meta.env for Vite instead of process.env
 const getPaystackPublicKey = () => {
   return import.meta.env.VITE_PAYSTACK_PUBLIC_KEY || "pk_test_c110ed6d6650bbd48690954ab01b05ca71ea9c03";
 };
@@ -16,12 +15,16 @@ export default function PaymentForm() {
   const [level, setLevel] = useState("100");
   const [isProcessing, setIsProcessing] = useState(false);
   const { currentUser } = useAuth();
-  // const navigate = useNavigate();
 
-  if (!currentUser || !currentUser.email) return <div>Loading...</div>;
+  if (!currentUser || !currentUser.email) {
+    return (
+      <div className="flex items-center justify-center p-8">
+        <Loader className="animate-spin text-blue-600" size={32} />
+      </div>
+    );
+  }
 
-  const amount = levelPrices[level] * 100; // kobo
-
+  const amount = levelPrices[level] * 100;
   const PAYSTACK_PUBLIC_KEY = getPaystackPublicKey();
 
   const handleSuccess = async (reference) => {
@@ -37,10 +40,8 @@ export default function PaymentForm() {
       });
       setIsProcessing(false);
       alert("Payment verified successfully! Temporary receipt ready.");
-      // Use React Router navigation - refresh the current page
-      // navigate(0);
       setTimeout(() => {
-              location.reload(); 
+        location.reload();
       }, 3000);
     } catch (error) {
       console.error(error);
@@ -59,16 +60,26 @@ export default function PaymentForm() {
   };
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md">
-      <h3 className="font-semibold text-gray-800 mb-4 text-lg">Make a New Payment</h3>
+    <div className="bg-gradient-to-br from-white to-gray-50 p-8 rounded-2xl shadow-xl border border-gray-100">
+      {/* Header */}
+      <div className="flex items-center gap-3 mb-6">
+        <div>
+          <h3 className="font-bold text-gray-900 text-xl">Make Payment</h3>
+          <p className="text-sm text-gray-500">Select your level and proceed to checkout</p>
+        </div>
+      </div>
 
-      <div className="flex flex-col md:flex-row gap-4 items-end">
-        <div className="flex-1">
-          <label className="block text-sm font-medium text-gray-700 mb-2">Select Level</label>
+      {/* Form Content */}
+      <div className="space-y-6">
+        {/* Level Selection */}
+        <div>
+          <label className="block text-sm font-semibold text-gray-700 mb-3">
+            Select Your Level
+          </label>
           <select
             value={level}
             onChange={(e) => setLevel(e.target.value)}
-            className="border border-gray-300 rounded-lg p-3 w-full"
+            className="border-2 border-gray-200 rounded-xl p-4 w-full text-gray-900 font-medium bg-white hover:border-blue-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={isProcessing}
           >
             {Object.keys(levelPrices).map((lvl) => (
@@ -79,16 +90,33 @@ export default function PaymentForm() {
           </select>
         </div>
 
+        {/* Amount Summary */}
+        <div className="bg-gray-50 rounded-xl p-5 border-2 border-dashed border-gray-200">
+          <div className="flex justify-between items-center">
+            <span className="text-gray-600 font-medium">Total Amount:</span>
+            <span className="text-2xl font-bold text-gray-900">
+              ₦{levelPrices[level].toLocaleString()}
+            </span>
+          </div>
+        </div>
+
+        {/* Payment Button */}
         {isProcessing ? (
-          <button className="bg-gray-400 text-white px-6 py-3 rounded-lg flex items-center gap-2">
-            <Loader className="animate-spin" size={18} /> Processing...
+          <button
+            disabled
+            className="w-full bg-gray-400 text-white px-6 py-4 rounded-xl font-semibold text-lg flex items-center justify-center gap-3 cursor-not-allowed"
+          >
+            <Loader className="animate-spin" size={22} />
+            Processing Payment...
           </button>
         ) : (
           <PaystackButton
-            className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700"
+            className="w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white px-6 py-4 rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 flex items-center justify-center gap-3"
             {...paystackProps}
           />
         )}
+
+        
       </div>
     </div>
   );
