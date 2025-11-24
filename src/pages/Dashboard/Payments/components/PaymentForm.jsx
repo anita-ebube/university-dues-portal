@@ -64,7 +64,7 @@ export default function PaymentForm() {
       {/* Header */}
       <div className="flex items-center gap-3 mb-6">
         <div>
-          <h3 className="font-bold text-gray-900 text-xl">Make Payment</h3>
+          <h3 className="font-bold text-gray-900 text-xl">Make Payment for your departmental dues</h3>
           <p className="text-sm text-gray-500">Select your level and proceed to checkout</p>
         </div>
       </div>
